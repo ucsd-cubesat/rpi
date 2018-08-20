@@ -21,8 +21,7 @@ def decodeCommand(rawData):
                 return [('Z', 0, '0')]
             elif(element[0] == 't'): # Temperature sensor
                 dataList.append((element[0], int(element[1]), element[2:]))
-            elif(element[0] == 'i'): #imu
-                dataList.append((element[0],int(element[1]),element[2:])) 
+            elif(element)
             else:
                 print('[ERROR]\tUnexpected command received:->' + element + '<-')
         return dataList
@@ -38,9 +37,7 @@ while(True):
                 print(colorama.Fore.GREEN + '[TEMP1]\t' + colorama.Style.RESET_ALL + data)
             elif(dataType == 't' and index == 2):
                 print(colorama.Fore.GREEN + '[TEMP2]\t' + colorama.Style.RESET_ALL + data)
-            elif(dataType == 'i'):
-                print(colorama.Fore.BLUE + '[IMU]\t' + colorama.Style.RESET_ALL + data)
- 
+
     except BaseException as e:
         print(colorama.Fore.RED + '[ERROR]\t' + colorama.Style.RESET_ALL + e.message)
         print(colorama.Fore.RED + '[ERROR]\t' + colorama.Style.RESET_ALL + traceback.format_exc())
