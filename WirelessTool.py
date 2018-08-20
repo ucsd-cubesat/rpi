@@ -7,6 +7,7 @@ class TCPEchoServer:
         self.__serverSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.__serverSock.bind((listeningIPAddress, port))
         self.__serverSock.listen(1)
+        self.__clientSockList = []
         # print("Server started. Listening connections")
     
     def connect(self,timeout=5):
@@ -15,6 +16,10 @@ class TCPEchoServer:
             self.__clientsocket,self.__addr = self.__serverSock.accept()
             print("Connection from %s" % str(self.__addr))
             self.__clientsocket.settimeout(self.__recvTimeout)
+            if(not len(self.__clientSockList)): #First client
+                self.__clientSockList = [self.__clientsocket]
+            else:
+                self.__clientSockList.append(self.__clientsocket)
             return True
         except socket.timeout:
             # print("Timeout awaiting connection")
@@ -33,7 +38,14 @@ class TCPEchoServer:
         except socket.timeout:
             # print("Timeout awaiting message")
             return 'Z' # timeout awaiting message
-            
+    def readAll(self):
+        msgList = ['Z']
+        for clientSock in self.__clientSockList:
+            try:
+                msgList.append(clientSock.recv(1024))
+            except socket.timeout:
+                pass
+        return msgList
     def write(self,data):
         self.__clientsocket.send(data)
         return True

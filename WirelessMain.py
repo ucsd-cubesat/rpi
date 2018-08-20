@@ -4,7 +4,10 @@ colorama.init()
 
 mainServer = WirelessTool.TCPEchoServer(3000,0.1)
 while(not mainServer.connect(10)):
-    print(colorama.Fore.YELLOW + '[INFO]\t' + colorama.Style.RESET_ALL + "Waiting Subprocess Connection")
+    print(colorama.Fore.YELLOW + '[INFO]\t' + colorama.Style.RESET_ALL + "Waiting Subprocess 1 Connection")
+
+while(not mainServer.connect(10)):
+    print(colorama.Fore.YELLOW + '[INFO]\t' + colorama.Style.RESET_ALL + "Waiting Subprocess 2 Connection")
 
 
 def decodeCommand(rawData):
@@ -27,11 +30,31 @@ def decodeCommand(rawData):
                 print('[ERROR]\tUnexpected command received:->' + element + '<-')
         return dataList
 
-mainServer.read() # Clear ultrasonic buffer
+def decodeList(rawDataList):
+    dataList = [('Z', 0, '0')]
+    for dataPacket in rawDataList:
+        dataPacket = dataPacket.split('\t')
+        for element in dataPacket:
+            if(len(element) == 0): # Handles the extra '' sometime when spliting
+                continue
+            elif(element == 'Z'):
+                continue
+            elif(element[0] == 't'): # Temperature sensor
+                dataList.append((element[0], int(element[1]), element[2:]))
+            elif(element[0] == 'i'): #imu
+                dataList.append((element[0],int(element[1]),element[2:])) 
+            else:
+                print('[ERROR]\tUnexpected command received:->' + element + '<-')
+    return dataList
+
+
+mainServer.readAll()
 while(True):
     try:
-        tempDataRaw = mainServer.read()
-        for dataType,index,data in decodeCommand(tempDataRaw):
+
+        tempDataRaw = mainServer.readAll()
+        # print(tempDataRaw)
+        for dataType,index,data in decodeList(tempDataRaw):
             if(dataType == 'Z'):
                 pass
             elif(dataType == 't' and index == 1):
