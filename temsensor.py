@@ -1,7 +1,11 @@
 import os
 import glob
 import time
- 
+import WirelessTool, colorama, traceback
+
+
+mainServer = WirelessTool.TCPClient('127.0.0.1',3000,0.1)
+
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
  
@@ -35,7 +39,7 @@ def read_temp():
         temp_string = lines[1][equals_pos+2:]
         temp_c = float(temp_string) / 1000.0
         temp_f = temp_c * 9.0 / 5.0 + 32.0
-        return temp_c, temp_f
+        return temp_c#, temp_f
 
 def read_temp1():
     lines = read_temp_raw1()
@@ -47,12 +51,19 @@ def read_temp1():
         temp_string = lines[1][equals_pos+2:]
         temp_c = float(temp_string) / 1000.0
         temp_f = temp_c * 9.0 / 5.0 + 32.0
-        return temp_c, temp_f
-
+        return temp_c#, temp_f
 
 while True:
-	print 'temp1 =',
-        print read_temp(),
-        print 'temp2 =',
-        print read_temp1()
-	time.sleep(1)
+    try:
+        t1 = str(read_temp())
+        print('temp1 sent = ' + t1)
+        mainServer.write('t1' + t1 + '\t')
+        t2 = str(read_temp1())
+        print 'temp2 sent = ' + t2
+        mainServer.write('t2' + t2 + '\t')
+        time.sleep(1)
+    except BaseException as e:
+        print(colorama.Fore.RED + '[ERROR]\t' + colorama.Style.RESET_ALL + e.message)
+        print(colorama.Fore.RED + '[ERROR]\t' + colorama.Style.RESET_ALL + traceback.format_exc())
+        mainServer.close()
+        break
