@@ -6,9 +6,11 @@ import WirelessTool, colorama, traceback
 
 mainServer = WirelessTool.TCPClient('127.0.0.1',3000,0.1)
 
+
+os.system('sudo dtoverlay w1-gpio gpiopin=17')
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
- 
+
 base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28-011832501aff')[0]
 device_file = device_folder + '/w1_slave'
@@ -56,10 +58,10 @@ def read_temp1():
 while True:
     try:
         t1 = str(read_temp())
-        print('temp1 sent = ' + t1)
+#        print('temp1 sent = ' + t1)
         mainServer.write('t1' + t1 + '\t')
         t2 = str(read_temp1())
-        print 'temp2 sent = ' + t2
+ #       print 'temp2 sent = ' + t2
         mainServer.write('t2' + t2 + '\t')
         time.sleep(1)
     except BaseException as e:
