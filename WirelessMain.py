@@ -61,6 +61,8 @@ while(True):
                 print(colorama.Fore.GREEN + '[TEMP1]\t' + colorama.Style.RESET_ALL + data)
             elif(dataType == 't' and index == 2):
                 print(colorama.Fore.GREEN + '[TEMP2]\t' + colorama.Style.RESET_ALL + data)
+            elif(dataType == 't' and index == 3):
+                print(colorama.Fore.GREEN + '[TEMP3]\t' + colorama.Style.RESET_ALL + data)
             elif(dataType == 'i'):
                 print(colorama.Fore.BLUE + '[IMU]\t' + colorama.Style.RESET_ALL + data)
  
