@@ -46,8 +46,11 @@ class TCPEchoServer:
             except socket.timeout:
                 pass
         return msgList
-    def write(self,data):
+    def writeCurrent(self,data):
         self.__clientsocket.send(data)
+        return True
+    def writeClient(self, clientID, data):
+        self.__clientSockList[clientID].send(data)
         return True
     def close(self):
         # self.__clientsocket.shutdown(1)
