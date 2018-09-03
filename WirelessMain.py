@@ -1,4 +1,4 @@
-import WirelessTool, socket, traceback, colorama, time
+import WirelessTool, socket, traceback, colorama, time, led
 colorama.init()
 
 
@@ -57,17 +57,23 @@ while(True):
         for dataType,index,data in decodeList(tempDataRaw):
             if(dataType == 'Z'):
                 pass
+ 		led.LED(4)
             elif(dataType == 't' and index == 1):
+		led.LED(3)
                 print(colorama.Fore.GREEN + '[TEMP1]\t' + colorama.Style.RESET_ALL + data)
             elif(dataType == 't' and index == 2):
+		led.LED(3)
                 print(colorama.Fore.GREEN + '[TEMP2]\t' + colorama.Style.RESET_ALL + data)
             elif(dataType == 't' and index == 3):
+		led.LED(3)
                 print(colorama.Fore.GREEN + '[TEMP3]\t' + colorama.Style.RESET_ALL + data)
             elif(dataType == 'i'):
+		led.LED(3)
                 print(colorama.Fore.BLUE + '[IMU]\t' + colorama.Style.RESET_ALL + data)
  
     except BaseException as e:
         print(colorama.Fore.RED + '[ERROR]\t' + colorama.Style.RESET_ALL + e.message)
         print(colorama.Fore.RED + '[ERROR]\t' + colorama.Style.RESET_ALL + traceback.format_exc())
         mainServer.close()
+        led.LED(4)
         break
