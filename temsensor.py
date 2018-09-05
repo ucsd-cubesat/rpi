@@ -21,7 +21,7 @@ device_folder2 = glob.glob(base_dir + '28-0118326173ff')[0]
 device_file2 = device_folder2 + '/w1_slave'
 
 time_old = int(time.time()*1000)#millis 
-time_new = time_old+1000
+time_new = time_old+5000
 
 
 def read_temp_raw():
@@ -77,7 +77,7 @@ def read_temp2():
 
 while True:
     try:
-        if(time_new - time_old >= 2000):    
+        if(time_new - time_old >= 5000):    
             t1 = str(read_temp())
             print('temp1 sent = ' + t1)
             mainServer.write('t1' + t1 + '\t')

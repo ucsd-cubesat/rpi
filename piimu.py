@@ -17,7 +17,7 @@ GYRO_YOUT_H  = 0x45
 GYRO_ZOUT_H  = 0x47
 
 time_old = int(time.time()*1000)
-time_new = time_old+1000
+time_new = time_old+5000
 
 
 def MPU_Init():
@@ -41,11 +41,11 @@ Device_Address = 0x68   # MPU6050 device address
 
 MPU_Init()
 
-time.sleep(1)
+time.sleep(2)
 
 while True:    
     try:
-        if(time_new - time_old >= 2000):
+        if(time_new - time_old >= 5000):
             acc_x = read_raw_data(ACCEL_XOUT_H)
             acc_y = read_raw_data(ACCEL_YOUT_H)
             acc_z = read_raw_data(ACCEL_ZOUT_H)
@@ -69,6 +69,7 @@ while True:
             mainServer.write('i1'+bun+'\t')
             time_old = time_new
             led.LED(2)
+            time.sleep(1)
         else:
             time_new = int(time.time()*1000)  
 
